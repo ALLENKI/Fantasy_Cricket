@@ -1,0 +1,110 @@
+from PyQt5 import QtGui, QtCore,QtWidgets
+from PyQt5.QtWidgets import QApplication,QWidget,QPushButton,QMessageBox
+from Fantasy_cricket import Ui_MainWindow
+import sqlite3
+MySchool=sqlite3.connect('C:/Users/DELL/AppData/Local/VirtualStore/Program Files (x86)/sqlite-tools-win32-x86-3240000 (1)/sqlite-tools-win32-x86-3240000/fant_cric.db')
+curschool=MySchool.cursor()
+
+
+class Ui_Form(object):
+
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(695, 449)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setObjectName("label")
+        self.verticalLayout.addWidget(self.label)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.comboBox_2 = QtWidgets.QComboBox(Form)
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.horizontalLayout.addWidget(self.comboBox_2)
+        self.comboBox = QtWidgets.QComboBox(Form)
+        self.comboBox.setObjectName("comboBox")
+        self.horizontalLayout.addWidget(self.comboBox)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.verticalLayout_2.addLayout(self.verticalLayout_3)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.verticalLayout_4.addItem(spacerItem)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_3.addWidget(self.label_2)
+        self.lineEdit = QtWidgets.QLineEdit(Form)
+        self.lineEdit.setObjectName("lineEdit")
+        self.horizontalLayout_3.addWidget(self.lineEdit)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem1)
+        self.label_3 = QtWidgets.QLabel(Form)
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_3.addWidget(self.label_3)
+        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.horizontalLayout_3.addWidget(self.lineEdit_2)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem2)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_2.addLayout(self.verticalLayout_4)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.listView_2 = QtWidgets.QListView(Form)
+        self.listView_2.setObjectName("listView_2")
+        self.horizontalLayout_2.addWidget(self.listView_2)
+        spacerItem3 = QtWidgets.QSpacerItem(11, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.horizontalLayout_2.addItem(spacerItem3)
+        self.listView = QtWidgets.QListView(Form)
+        self.listView.setStyleSheet("text-align:center")
+        self.listView.setObjectName("listView")
+        self.horizontalLayout_2.addWidget(self.listView)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setEnabled(True)
+        self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.pushButton.setFocusPolicy(QtCore.Qt.StrongFocus)
+        self.pushButton.setObjectName("pushButton")
+        self.verticalLayout_2.addWidget(self.pushButton)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.getTeams()
+
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-size:10pt; font-weight:600;\">Evaluate the Performance of your Fantasy Team</span></p></body></html>"))
+        self.label_2.setText(_translate("Form", "<html><head/><body><p><span style=\" font-weight:600;\">Players</span></p></body></html>"))
+        self.label_3.setText(_translate("Form", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">Points</span></p></body></html>"))
+        self.pushButton.setText(_translate("Form", "Calculate Score"))
+
+    def getTeams(self):
+        curschool.execute('''select name from teams;''')
+        names=curschool.fetchone()
+        for x in names:
+            self.comboBox_2.addItem(str(x))
+        curschool.execute('''select value from teams;''')
+        values=curschool.fetchone()
+        self.lineEdit_2.setText(str(values[0]))
+        curschool.execute('''select players from teams;''')
+        players=curschool.fetchone()
+        self.lineEdit.setText(players[0])
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    Form.show()
+    sys.exit(app.exec_())
